@@ -82,11 +82,11 @@ import upcraftStrategyCorp from '../../imports/Screenshot_2026-06-16_at_3.25.42_
 import upcraftDatasite from '../../imports/data_site_assets.png';
 import expediaCareers from '../../imports/Screenshot_2026-06-17_at_9.49.33_AM.png';
 import drumChannelDesignSystem from '../../imports/drumchannel_design_system.png';
-import schoolinkWelcome from '../../imports/welcome_screen.png';
-import schoolinkCreate from '../../imports/create_new_referral.png';
-import schoolinkReferrals from '../../imports/school_user_referrals.png';
-import schoolinkDetails from '../../imports/referral_details.png';
-import schoolinkReports from '../../imports/reports.png';
+import schoolinkWelcome from '../../imports/Welcome_screen.png';
+import schoolinkCreate from '../../imports/Create_New_Referral.png';
+import schoolinkReferrals from '../../imports/School_User_Referrals.png';
+import schoolinkDetails from '../../imports/Referral_Details.png';
+import schoolinkReports from '../../imports/Reports.png';
 import schoolinkFileSharing from '../../imports/file_sharing.png';
 import carPartPlanetDashboard from '../../imports/car_part_planet_dashboard.png';
 import carPartPlanetRawData from '../../imports/car_part_planet_raw_data.png';
