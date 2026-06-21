@@ -41,7 +41,18 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
       });
 
       if (!response.ok) {
-        throw new Error(`Contact API submit failed with status ${response.status}`);
+        let messageText = `Contact API submit failed with status ${response.status}`;
+        try {
+          const errorPayload = await response.json();
+          if (errorPayload?.details) {
+            messageText = String(errorPayload.details);
+          } else if (errorPayload?.error) {
+            messageText = String(errorPayload.error);
+          }
+        } catch {
+          // keep generic fallback
+        }
+        throw new Error(messageText);
       }
 
       setIsSubmitting(false);
@@ -54,9 +65,10 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
         setIsSuccess(false);
         onClose();
       }, 3000);
-    } catch {
+    } catch (error) {
       setIsSubmitting(false);
-      setSubmitError('Message failed to send. Please try again.');
+      const rawMessage = error instanceof Error ? error.message : 'Message failed to send. Please try again.';
+      setSubmitError(rawMessage.length > 220 ? `${rawMessage.slice(0, 220)}...` : rawMessage);
     }
   };
 

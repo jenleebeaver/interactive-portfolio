@@ -5,7 +5,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, message, company } = req.body || {};
+    const payload = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    const { name, email, message, company } = payload;
 
     // Honeypot: silently accept likely bot submissions.
     if (company) {
@@ -21,7 +22,10 @@ export default async function handler(req, res) {
     const fromEmail = process.env.CONTACT_FROM_EMAIL || 'Portfolio Contact <onboarding@resend.dev>';
 
     if (!resendApiKey || !toEmail) {
-      return res.status(500).json({ error: 'Email service is not configured' });
+      return res.status(500).json({
+        error: 'Email service is not configured',
+        details: 'Missing RESEND_API_KEY or CONTACT_TO_EMAIL in Vercel environment variables.',
+      });
     }
 
     const sendRes = await fetch('https://api.resend.com/emails', {
@@ -41,11 +45,18 @@ export default async function handler(req, res) {
 
     if (!sendRes.ok) {
       const errorText = await sendRes.text();
-      return res.status(502).json({ error: 'Failed to send email', details: errorText });
+      return res.status(502).json({
+        error: 'Failed to send email',
+        details: errorText,
+      });
     }
 
     return res.status(200).json({ ok: true });
-  } catch {
-    return res.status(500).json({ error: 'Unexpected server error' });
+  } catch (error) {
+    console.error('Contact API error:', error);
+    return res.status(500).json({
+      error: 'Unexpected server error',
+      details: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 }

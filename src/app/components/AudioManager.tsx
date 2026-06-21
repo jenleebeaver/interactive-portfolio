@@ -12,7 +12,6 @@ const nodeFrequencies: Record<string, number[]> = {
   music: [246.94, 329.63], // B3, E4
   education: [293.66, 392.00], // D4, G4
   media: [329.63, 440.00], // E4, A4
-  analytics: [392.00, 493.88], // G4, B4
   api: [440.00, 587.33], // A4, D5
   ai: [493.88, 659.25], // B4, E5
 };
