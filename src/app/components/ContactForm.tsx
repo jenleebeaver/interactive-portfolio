@@ -7,23 +7,57 @@ interface ContactFormProps {
   onClose: () => void;
 }
 
+function scrollToPortfolioIndex() {
+  const portfolioProgress = 0.56;
+  const sceneSectionPx = (800 / 100) * window.innerHeight;
+  const sceneScrollable = Math.max(sceneSectionPx - window.innerHeight, 1);
+  window.scrollTo({ top: portfolioProgress * sceneScrollable, behavior: 'smooth' });
+}
+
 export function ContactForm({ isOpen, onClose }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [company, setCompany] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSubmitError(null);
     setIsSubmitting(true);
-    
-    // Simulate sending an email/message to the server
-    setTimeout(() => {
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          company, // honeypot field
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Contact API submit failed with status ${response.status}`);
+      }
+
       setIsSubmitting(false);
       setIsSuccess(true);
+      setName('');
+      setEmail('');
+      setMessage('');
+      setCompany('');
       setTimeout(() => {
         setIsSuccess(false);
         onClose();
       }, 3000);
-    }, 1500);
+    } catch {
+      setIsSubmitting(false);
+      setSubmitError('Message failed to send. Please try again.');
+    }
   };
 
   return (
@@ -41,6 +75,17 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
             className="absolute top-6 right-6 text-blue-200/60 hover:text-white transition-colors"
           >
             <X size={24} />
+          </button>
+
+          <button
+            onClick={() => {
+              onClose();
+              scrollToPortfolioIndex();
+            }}
+            className="absolute top-7 left-8 text-blue-200/65 hover:text-[#F9D976] transition-colors uppercase"
+            style={{ fontFamily: '"Inter", sans-serif', fontSize: '10px', letterSpacing: '0.22em' }}
+          >
+            Back to Portfolio Index
           </button>
 
           <motion.div
@@ -71,7 +116,21 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
                 <p className="text-green-200/80 text-xs font-light">Thanks for reaching out. I'll be in touch shortly.</p>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-6"
+              >
+                <input
+                  type="text"
+                  name="company"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  autoComplete="off"
+                  tabIndex={-1}
+                  className="hidden"
+                  aria-hidden="true"
+                />
+
                 <div>
                   <label htmlFor="name" className="block text-xs uppercase tracking-[0.2em] text-blue-200/60 font-medium mb-2">
                     Your Name
@@ -79,7 +138,10 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
                   <input
                     type="text"
                     id="name"
+                    name="name"
                     required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="w-full bg-blue-900/10 border border-blue-500/20 text-white px-4 py-3 focus:outline-none focus:border-blue-400/60 transition-colors focus:bg-blue-900/20 text-sm font-light"
                     placeholder="Enter your name"
                   />
@@ -92,7 +154,10 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
                   <input
                     type="email"
                     id="email"
+                    name="email"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-blue-900/10 border border-blue-500/20 text-white px-4 py-3 focus:outline-none focus:border-blue-400/60 transition-colors focus:bg-blue-900/20 text-sm font-light"
                     placeholder="Enter your email"
                   />
@@ -104,12 +169,19 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
                   </label>
                   <textarea
                     id="message"
+                    name="message"
                     required
                     rows={5}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="w-full bg-blue-900/10 border border-blue-500/20 text-white px-4 py-3 focus:outline-none focus:border-blue-400/60 transition-colors focus:bg-blue-900/20 resize-none text-sm leading-relaxed font-light"
                     placeholder="Tell me about your project..."
                   ></textarea>
                 </div>
+
+                {submitError ? (
+                  <p className="text-red-300 text-xs font-light">{submitError}</p>
+                ) : null}
 
                 <button
                   type="submit"

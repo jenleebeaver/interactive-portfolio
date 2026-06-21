@@ -2418,6 +2418,34 @@ export function CaseStudies() {
   const targetProgressRef = useRef(0);
 
   useEffect(() => {
+    const jumpToHashProject = (behavior: ScrollBehavior = 'smooth') => {
+      if (typeof window === 'undefined') return;
+      const hash = window.location.hash;
+      if (!hash.startsWith('#case-study-')) return;
+
+      const targetId = decodeURIComponent(hash.replace('#case-study-', ''));
+      const targetIndex = projects.findIndex((p) => p.id === targetId);
+      if (targetIndex < 0) return;
+
+      const section = document.getElementById('case-studies');
+      if (!section) return;
+
+      const targetTop = section.offsetTop + targetIndex * window.innerHeight;
+      window.scrollTo({ top: targetTop, behavior });
+      targetProgressRef.current = targetIndex / Math.max(projects.length - 1, 1);
+      setProgress(targetProgressRef.current);
+    };
+
+    const handleHashChange = () => jumpToHashProject('smooth');
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Support opening directly from a shared hash URL.
+    window.setTimeout(() => jumpToHashProject('auto'), 0);
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       const el = wrapperRef.current;
       if (!el) return;

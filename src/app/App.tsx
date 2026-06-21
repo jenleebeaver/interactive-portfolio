@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { ThreeScene } from './components/ThreeScene';
 import { InfoPanel } from './components/InfoPanel';
 import { IntroSection } from './components/IntroSection';
@@ -89,6 +90,7 @@ export default function App() {
 
       {/* Case studies — normal document flow below the scroll-driven section */}
       <CaseStudies />
+      <Analytics />
     </div>
   );
 }

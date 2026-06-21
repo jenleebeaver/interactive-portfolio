@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
-import { AboutIllustration } from './AboutIllustrations';
+import { AboutIllustration, OjaiOriginsSceneWide } from './AboutIllustrations';
 
 interface AboutMeProps {
   isVisible: boolean;
@@ -554,8 +554,23 @@ export function AboutMeSection({ isVisible, scrollProgress }: AboutMeProps) {
                       </div>
                     )}
 
+                    {/* Origins uses a full-width Ojai scene below the timeline rule */}
+                    {step.illustrationKey === 'origins' && (
+                      <div
+                        className="absolute hidden md:flex justify-center pointer-events-none"
+                        style={{
+                          top: 'calc(50vh + 1.3rem)',
+                          left: '50%',
+                          transform: `translate(calc(-50% + ${textTransformX * 0.45}px), 0)`,
+                          width: '100%',
+                        }}
+                      >
+                        <OjaiOriginsSceneWide isActive={distanceFromCenter < 0.72} />
+                      </div>
+                    )}
+
                     {/* Illustration — opposite side of rule from text */}
-                    {step.illustrationKey && (
+                    {step.illustrationKey && step.illustrationKey !== 'origins' && (
                       <div
                         className="absolute hidden md:block"
                         style={{

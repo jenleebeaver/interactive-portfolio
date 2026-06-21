@@ -12,7 +12,7 @@ const portfolioEntries = [
   { id: 'design-systems', number: '02', label: 'Design Systems',                  sub: 'Component Libraries · Figma · Tailwind' },
   { id: 'learning',       number: '03', label: 'Digital Learning Platforms',       sub: '130K+ Users · LMS · Engagement' },
   { id: 'ecommerce',      number: '04', label: 'E-Commerce & Marketing',           sub: 'Vue · Launch Campaigns · Performance' },
-  { id: 'enterprise',     number: '05', label: 'Enterprise & Internal Tools',      sub: 'Apple · First Republic · Retool' },
+  { id: 'enterprise',     number: '05', label: 'Enterprise & Internal Tools',      sub: 'First Republic · Agavos · Retool' },
   { id: 'analytics',      number: '06', label: 'Machine Learning Data Analysis',   sub: 'K-Means · Jupyter · Demand Segmentation' },
   { id: 'cms-platforms',  number: '07', label: 'CMS & Platforms',                  sub: 'WordPress · Sanity · HubSpot · Marketo' },
   { id: 'ai-dev',         number: '08', label: 'AI-Assisted Engineering',          sub: 'Claude · Cursor · ML Certification' },
