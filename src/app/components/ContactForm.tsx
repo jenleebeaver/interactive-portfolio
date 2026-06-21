@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ContactFormProps {
   isOpen: boolean;
@@ -22,6 +22,14 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [company, setCompany] = useState('');
+  const [website, setWebsite] = useState('');
+  const [formStartedAt, setFormStartedAt] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormStartedAt(Date.now());
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +44,9 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
           name,
           email,
           message,
-          company, // honeypot field
+          company, // honeypot fields
+          website,
+          elapsedMs: Date.now() - formStartedAt,
         }),
       });
 
@@ -61,6 +71,7 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
       setEmail('');
       setMessage('');
       setCompany('');
+      setWebsite('');
       setTimeout(() => {
         setIsSuccess(false);
         onClose();
@@ -132,16 +143,39 @@ export function ContactForm({ isOpen, onClose }: ContactFormProps) {
                 onSubmit={handleSubmit}
                 className="space-y-6"
               >
-                <input
-                  type="text"
-                  name="company"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  autoComplete="off"
-                  tabIndex={-1}
-                  className="hidden"
+                {/* Honeypot fields (bots often fill these, humans should not). */}
+                <div
                   aria-hidden="true"
-                />
+                  style={{
+                    position: 'absolute',
+                    left: '-10000px',
+                    width: '1px',
+                    height: '1px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <label htmlFor="company">Company</label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    autoComplete="off"
+                    tabIndex={-1}
+                  />
+
+                  <label htmlFor="website">Website</label>
+                  <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    autoComplete="off"
+                    tabIndex={-1}
+                  />
+                </div>
 
                 <div>
                   <label htmlFor="name" className="block text-xs uppercase tracking-[0.2em] text-blue-200/60 font-medium mb-2">

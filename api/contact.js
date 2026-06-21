@@ -6,10 +6,16 @@ export default async function handler(req, res) {
 
   try {
     const payload = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-    const { name, email, message, company } = payload;
+    const { name, email, message, company, website, elapsedMs } = payload;
 
     // Honeypot: silently accept likely bot submissions.
-    if (company) {
+    if (company || website) {
+      return res.status(200).json({ ok: true });
+    }
+
+    // Time-based bot guard: submissions completed unrealistically fast are likely automated.
+    const elapsed = Number(elapsedMs);
+    if (Number.isFinite(elapsed) && elapsed > 0 && elapsed < 1500) {
       return res.status(200).json({ ok: true });
     }
 
