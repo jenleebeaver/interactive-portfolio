@@ -29,12 +29,15 @@ interface Slide {
   assets?: Array<{
     id: string;
     label: string;
-    type: 'image' | 'pdf' | 'code';
+    type: 'image' | 'pdf' | 'code' | 'video';
     src?: string;
+    videoSrc?: string;
     compareSrc?: string;
     pdfSrc?: string;
     code?: string;
     codeLanguage?: string;
+    videoOverlayTitle?: string;
+    videoOverlayBody?: string;
     description?: string;
     implementationHighlights?: string[];
     skills?: string[];
@@ -129,6 +132,7 @@ import frbApiSubscriptionFlows from '../../imports/frb_api_subscription_flows.pn
 import imforzaNipitHomepage from '../../imports/imforza_nipit_homepage.png';
 import imforzaNipitInnerPagesIa from '../../imports/imforza_nipit_inner_pages_ia.png';
 import imforzaNipitMobileDesignAssets from '../../imports/imforza_nipit_mobile_design_assets.png';
+import antarestechDunningWireframe from '../../imports/antarestech_dunning_wireframe.png';
 
 export const projects: Project[] = [
   {
@@ -1462,6 +1466,108 @@ plt.show()`,
       },
     ],
   },
+  {
+    id: 'antarestech',
+    number: '10',
+    client: 'AntaresTech',
+    clientUrl: 'https://www.antarestech.com',
+    title: 'Auto-Tune Subscription Model',
+    role: 'Design Engineer',
+    year: '2023',
+    description:
+      'Case study for AntaresTech, creator of Auto-Tune. Built a brand-aligned wireframing system in Figma to map the new subscription model across marketing pages and customer-account flows, then partnered with engineering to implement rollout-ready updates in WordPress/PHP and Vue/Vuex.',
+    tech: ['Figma', 'WordPress', 'PHP', 'Custom Components', 'Divi Builder', 'Vue', 'Vuex', 'Subscription UX'],
+    slides: [
+      {
+        panelTitle: 'Auto-Tune',
+        projectViewTitle: 'Subscription Model Rollout',
+        src: antarestechDunningWireframe,
+        alt: 'AntaresTech Auto-Tune subscription flow wireframe board',
+        caption: 'Brand-Aligned Wireframes for Subscription Rollout',
+        isHero: true,
+        panelDescription:
+          'Antares Audio Technologies is the company behind Auto-Tune, one of the most recognized vocal production products in music software. This work captures my role in planning and shipping subscription-model updates across global marketing and account experiences: I created a brand-aligned Figma wireframe system, mapped rollout states for Vocodist and Slice, coordinated handoffs across design/stakeholders/marketing, and supported implementation across WordPress/PHP/Divi marketing surfaces and Vue/Vuex customer-portal flows.',
+        description:
+          'This system-level wireframe board organized lifecycle screens (marketing entry, plan selection, subscription state transitions, confirmations, and account recovery paths) so teams could sequence implementation without ambiguity. It provided one shared artifact for content strategy, UX logic, and engineering scope.',
+        skills: ['Figma', 'Design Systems', 'WordPress', 'PHP', 'Divi Builder', 'Vue', 'Vuex', 'Cross-Functional Delivery'],
+        highlightMetrics: [
+          'Single source of truth for rollout scope',
+          'Marketing + account portal flow alignment',
+          'Brand-aligned custom wireframe toolkit',
+          'Implementation-ready engineering handoff',
+        ],
+        assets: [
+          {
+            id: 'autotune-subscription-wireframe-board',
+            label: 'Subscription Wireframe Board',
+            type: 'image',
+            src: antarestechDunningWireframe,
+            alt: 'Auto-Tune subscription model wireframes across marketing and account portal',
+            centerInFrame: true,
+            description:
+              'Comprehensive wireframe map covering the Auto-Tune subscription-model migration, including marketing page entry points, pricing and plan pathways, account-portal updates, payment-state messaging, and dunning recovery touchpoints.',
+            annotations: [
+              { x: 7, y: 19, label: 'Marketing entry + product value framing', dir: 'right' },
+              { x: 24, y: 34, label: 'Plan selection and pricing state patterns', dir: 'right' },
+              { x: 43, y: 28, label: 'My Account subscription status states', dir: 'left' },
+              { x: 61, y: 30, label: 'Card-expiry + failed-payment recovery path', dir: 'left' },
+              { x: 89, y: 34, label: 'Portal variants for plan change/cancel flows', dir: 'left' },
+              { x: 44, y: 68, label: 'Mobile portal parity and responsive account UX', dir: 'right' },
+            ],
+            implementationHighlights: [
+              'Modeled subscription state in Vuex with a normalized store (`account`, `subscription`, `billing`, `invoices`, `dunning`) so each portal route consumed one consistent source of truth.',
+              'Implemented Vue route guards and async bootstrap actions to fetch account/subscription context before rendering protected billing and plan-management views.',
+              'Built reusable Vue components for plan cards, renewal notices, delinquency banners, and payment-method modals with shared prop contracts and event-driven updates.',
+              'Added Vuex actions/mutations for upgrade, downgrade, cancellation, reactivation, payment retry, and card update flows; each action mapped directly to API outcomes and UX states defined in the wireframes.',
+              'Introduced optimistic UI patterns with rollback handling for plan-change interactions to keep account UX responsive while preserving data integrity.',
+              'Created derived Vuex selectors/getters for entitlement-driven UI, enabling marketing-to-portal continuity (feature messaging, locked/unlocked states, and renewal prompts).',
+              'Implemented idempotent API integration patterns for billing mutations to prevent duplicate subscription transitions during retries or network instability.',
+              'Instrumented event tracking at critical subscription lifecycle points (plan view, checkout intent, failure recovery, successful update) to support funnel and retention analysis.',
+              'Delivered marketing-page updates in WordPress using PHP custom components and Divi Builder modules so subscription messaging, pricing blocks, and CTAs stayed consistent with the portal logic.',
+              'Mapped wireframe sections to reusable CMS component templates, allowing marketing teams to update launch content without breaking the technical subscription flow architecture.',
+            ],
+          },
+          {
+            id: 'autotune-global-marketing-rollout-video',
+            label: 'Vocodist + Slice Marketing Rollout Demo',
+            type: 'video',
+            videoSrc: '/antarestech_marketing_rollout.mp4',
+            alt: 'Screen recording of AntaresTech global e-commerce marketing rollout work',
+            description:
+              'Screen-recorded walkthrough of production marketing work for AntaresTech\'s global e-commerce subscription rollout. This demo shows how Vocodist and Slice launch updates were implemented across campaign and product-marketing pages, how subscription-state messaging was structured through the user journey, and how the new subscription modal was integrated to connect marketing touchpoints with account behavior.',
+            videoOverlayTitle: 'Auto-Tune Subscription Marketing Rollout',
+            videoOverlayBody:
+              'Video demonstrates the live rollout framework for Vocodist and Slice, including launch messaging, conversion-state updates, and the added subscription modal. I led cross-functional handoffs with designers, stakeholders, and marketing teams to align implementation and release execution.',
+            implementationHighlights: [
+              'Implemented and QAed subscription-related marketing experiences for high-volume global traffic and campaign surfaces.',
+              'Delivered WordPress/PHP/Divi updates that aligned product messaging, pricing context, and conversion paths for Vocodist and Slice launches.',
+              'Coordinated delivery handoffs across design, stakeholder, and marketing teams to keep implementation, content, and launch readiness synchronized.',
+              'Validated subscription modal behavior and downstream account-flow implications so marketing touchpoints matched portal-state expectations.',
+            ],
+            skills: ['WordPress', 'PHP', 'Divi Builder', 'Vue', 'Vuex', 'Stakeholder Communication', 'Global E-Commerce'],
+          },
+        ],
+        detailSections: [
+          {
+            title: 'Marketing Implementation',
+            items: [
+              'WordPress + PHP custom components for pricing and plan-messaging blocks',
+              'Divi Builder module extensions for reusable launch and subscription sections',
+              'Shared content schema so marketing copy and CTA states matched portal behavior',
+            ],
+          },
+          {
+            title: 'Portal Implementation',
+            items: [
+              'Vue + Vuex state model for plan lifecycle, billing health, and dunning recovery',
+              'Componentized account views for upgrade/downgrade/cancel/reactivate pathways',
+              'API-driven subscription transitions with validation, rollback, and status feedback',
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 // ─── Annotation overlay ───────────────────────────────────────────────────────
@@ -2174,6 +2280,47 @@ function CaseStudyCard({ project }: { project: Project }) {
                         </button>
                       </>
                     )
+                  ) : currentAsset.type === 'video' && currentAsset.videoSrc ? (
+                    <div className="w-full h-full p-3">
+                      <div
+                        className="relative rounded-sm overflow-hidden border border-[#FEF5EC]/10 w-full h-full"
+                        style={{ background: 'rgba(3,6,40,0.65)' }}
+                      >
+                        <video
+                          src={currentAsset.videoSrc}
+                          controls
+                          preload="metadata"
+                          playsInline
+                          className="w-full h-full object-contain"
+                        />
+
+                        {(currentAsset.videoOverlayTitle || currentAsset.videoOverlayBody) ? (
+                          <div className="absolute inset-x-0 top-0 p-3 md:p-4 pointer-events-none">
+                            <div
+                              className="max-w-2xl border border-[#F9D976]/28 rounded-sm px-3 py-2"
+                              style={{ background: 'rgba(5,14,96,0.68)', backdropFilter: 'blur(4px)' }}
+                            >
+                              {currentAsset.videoOverlayTitle ? (
+                                <div
+                                  className="uppercase text-[#F9D976]/92 mb-1"
+                                  style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '9px', letterSpacing: '0.2em', fontWeight: 300 }}
+                                >
+                                  {currentAsset.videoOverlayTitle}
+                                </div>
+                              ) : null}
+                              {currentAsset.videoOverlayBody ? (
+                                <p
+                                  className="text-[#FEF5EC]/80 leading-relaxed"
+                                  style={{ fontFamily: '"Inter", sans-serif', fontSize: '0.72rem', letterSpacing: '0.01em', margin: 0 }}
+                                >
+                                  {currentAsset.videoOverlayBody}
+                                </p>
+                              ) : null}
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
                   ) : currentAsset.type === 'code' && currentAsset.code ? (
                     <div
                       className="w-full h-full overflow-auto p-4"
@@ -2276,7 +2423,9 @@ function CaseStudyCard({ project }: { project: Project }) {
                   className="text-[#FEF5EC]/35 uppercase"
                   style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '9px', letterSpacing: '0.25em', fontWeight: 200 }}
                 >
-                  {isHero ? '↑ Hover to expand · scroll to zoom · drag to pan' : slide.caption}
+                  {isHero && currentAsset.type === 'image'
+                    ? '↑ Hover to expand · scroll to zoom · drag to pan'
+                    : slide.caption}
                 </div>
               )}
               {displayedDescription && (
