@@ -133,8 +133,7 @@ const steps = [
     emoji: '🎵',
     heading: (
       <>
-        Studied philosophy<br />
-        and music.
+        Studied music.
       </>
     ),
     body: 'B.A. in Music Performance from UC Santa Cruz (2016). Later completed a Full Stack Software Engineering Certification at Flatiron School (2021).',
