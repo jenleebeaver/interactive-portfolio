@@ -2,6 +2,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { AboutIllustration, OjaiOriginsSceneWide } from './AboutIllustrations';
 import soundcloudJenniferBeaver from '../../imports/soundcloud_jennifer_beaver.png';
+import cubicleBlob from '../../imports/cubicle_blob.png';
+import futurecorpBlob from '../../imports/futurecorp_blob.png';
+import aufiBlob from '../../imports/aufi_blob.png';
+import carolklineBlob from '../../imports/carolkline_blob.png';
+import stylebeeBlob from '../../imports/stylebee_blob.png';
 
 interface AboutMeProps {
   isVisible: boolean;
@@ -163,6 +168,33 @@ const steps = [
       </>
     ),
     body: 'Pivoting from Bay Area education to tech, I designed for Stylebee, completed dev internships at Cubicle, Future Corp London, and Aufi, and delivered design and development for author Carol Kline. I later earned a Flatiron School full-stack certification.',
+    websiteBlobs: [
+      {
+        label: 'Cubicle Journal',
+        url: 'https://cubiclejournal.com/category/fashion-style/',
+        image: cubicleBlob,
+      },
+      {
+        label: 'Future Corp London',
+        url: 'https://futurecorp.london',
+        image: futurecorpBlob,
+      },
+      {
+        label: 'AUFI',
+        url: 'https://aufi.com',
+        image: aufiBlob,
+      },
+      {
+        label: 'Carol Kline',
+        url: 'https://carolkline.com',
+        image: carolklineBlob,
+      },
+      {
+        label: 'Stylebee',
+        url: 'https://www.stylebee.in',
+        image: stylebeeBlob,
+      },
+    ],
   },
   {
     number: '05',
@@ -535,6 +567,52 @@ export function AboutMeSection({ isVisible, scrollProgress }: AboutMeProps) {
                               {step.musicArchiveNote}
                             </span>
                           </a>
+                        ) : null}
+
+                        {step.websiteBlobs?.length ? (
+                          <div
+                            className="absolute left-1/2 flex flex-wrap items-start justify-center gap-4 md:gap-6 pointer-events-auto"
+                            style={{
+                              bottom: 'calc(50vh + 2.2rem)',
+                              transform: `translate(calc(-50% + ${textTransformX}px), 0)`,
+                              maxWidth: 'min(90vw, 900px)',
+                            }}
+                          >
+                            {step.websiteBlobs.map((blob, blobIdx) => (
+                              <motion.a
+                                key={blob.url}
+                                href={blob.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex flex-col items-center gap-2"
+                                style={{ cursor: 'none' }}
+                                animate={{ y: [0, -6, 0] }}
+                                transition={{
+                                  duration: 3.2 + blobIdx * 0.35,
+                                  repeat: Infinity,
+                                  ease: 'easeInOut',
+                                  delay: blobIdx * 0.22,
+                                }}
+                              >
+                                <div
+                                  className="w-[92px] h-[92px] md:w-[108px] md:h-[108px] rounded-full overflow-hidden border border-[#F9D976]/35 shadow-[0_0_16px_rgba(249,217,118,0.18)] transition-colors duration-200 hover:border-[#F9D976]/75"
+                                  style={{ background: 'rgba(254,245,236,0.04)' }}
+                                >
+                                  <img
+                                    src={blob.image}
+                                    alt={`${blob.label} landing page preview`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <span
+                                  className="text-[#FEF5EC]/65 uppercase text-center"
+                                  style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '8px', letterSpacing: '0.14em', maxWidth: '120px' }}
+                                >
+                                  {blob.label}
+                                </span>
+                              </motion.a>
+                            ))}
+                          </div>
                         ) : null}
 
                         <div
