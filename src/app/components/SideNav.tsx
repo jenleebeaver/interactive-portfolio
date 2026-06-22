@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { useEffect, useState } from 'react';
 
 interface SideNavProps {
   scrollProgress: number;
@@ -46,6 +47,27 @@ function scrollToSection(id: string) {
 }
 
 export function SideNav({ scrollProgress }: SideNavProps) {
+  const [isCaseStudiesActive, setIsCaseStudiesActive] = useState(false);
+
+  useEffect(() => {
+    const target = document.getElementById('case-studies');
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsCaseStudiesActive(entry.isIntersecting);
+      },
+      {
+        root: null,
+        // Treat section as "active" once it occupies a meaningful viewport area.
+        threshold: 0.2,
+      }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -67,7 +89,10 @@ export function SideNav({ scrollProgress }: SideNavProps) {
         />
 
         {navItems.map((item) => {
-          const isActive = scrollProgress >= item.activeRange[0] && scrollProgress < item.activeRange[1];
+          const isWorkItem = item.label === 'Work';
+          const isActive = isWorkItem
+            ? isCaseStudiesActive
+            : !isCaseStudiesActive && scrollProgress >= item.activeRange[0] && scrollProgress < item.activeRange[1];
 
           return (
             <button

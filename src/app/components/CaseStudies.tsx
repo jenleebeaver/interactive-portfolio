@@ -52,6 +52,9 @@ interface Slide {
     annotations?: Annotation[];
     compareAnnotations?: Annotation[];
     darkAnnotations?: boolean;
+    restricted?: boolean;
+    restrictedMessage?: string;
+    requestAccessEmailSubject?: string;
   }>;
   detailSections?: Array<{
     title: string;
@@ -75,6 +78,8 @@ export interface Project {
   showProjectTabs?: boolean;
   slides: Slide[];
 }
+
+const ACCESS_TOKEN_STORAGE_KEY = 'restricted-access-tokens-v1';
 
 import schoolinkHero from '../../imports/schoolink_wireframe_overview.png';
 import miqRoadshowPdf from '../../imports/MIQ_Roadshow_LP_V2_compressed.pdf';
@@ -204,6 +209,10 @@ export const projects: Project[] = [
             label: 'Secure BFF Login Flow',
             type: 'code',
             codeLanguage: 'typescript',
+            restricted: true,
+            restrictedMessage:
+              'This architecture snippet includes production auth and session patterns for a live client system. Public view is restricted; detailed review is available on request.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts Secure BFF Login Flow',
             description:
               'Implemented a Backend-for-Frontend login endpoint that forwards request metadata to the API, sets auth tokens as httpOnly cookies, and returns only sanitized user profile data to the client. This keeps token handling off the browser runtime while preserving UX.',
             code: `const forwardedFor = request.headers.get('x-forwarded-for');
@@ -262,6 +271,10 @@ return NextResponse.json({
             label: 'Global React Query Auth Recovery',
             type: 'code',
             codeLanguage: 'typescript',
+            restricted: true,
+            restrictedMessage:
+              'This asset documents internal auth recovery and error-handling architecture for a production storefront. Public display is restricted to protect implementation detail.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts Global React Query Auth Recovery',
             description:
               'Built a centralized React Query error handling for auth failures: detect auth errors, dedupe refresh attempts per request key, trigger token refresh, and fall back to logout + redirect when refresh fails. This reduced repeated auth logic across individual hooks. Skills demonstrated: React Query, Error Handling, Session Management, Frontend Architecture.',
             code: `function QueryClientProviderWithErrorHandling({ children }: { children: ReactNode }) {
@@ -338,6 +351,10 @@ return NextResponse.json({
             label: 'Production Deployment Automation',
             type: 'code',
             codeLanguage: 'shell',
+            restricted: true,
+            restrictedMessage:
+              'This release automation script includes production deployment workflow details for a live client system and is shared only by request.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts Production Deployment Automation',
             description:
               'I automated production deployment to Vercel with a scripted release flow and conditional post-deploy smoke validation. This demonstrates ownership beyond feature coding into release reliability and operational quality. Skills demonstrated: Vercel, Release Engineering, Bash Automation, Production Workflows.',
             code: `#!/usr/bin/env bash
@@ -432,6 +449,10 @@ fi`,
             label: 'Raw Data Sheet',
             type: 'image',
             src: carPartPlanetRawData,
+            restricted: true,
+            restrictedMessage:
+              'This source worksheet references client operating data. The public view is intentionally blurred; access can be shared during interview or approved review contexts.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts ML Raw Data Sheet',
             alt: 'Raw transmission order data worksheet',
             annotations: [
               {
@@ -465,6 +486,10 @@ fi`,
             label: 'Visualization Dashboard',
             type: 'image',
             src: carPartPlanetDashboard,
+            restricted: true,
+            restrictedMessage:
+              'This dashboard reflects client demand and order-pattern data from the ML engagement. Public view is restricted to protect business-sensitive information.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts ML Visualization Dashboard',
             alt: 'Sales and order dashboard visualizations',
           },
           {
@@ -491,6 +516,10 @@ df['Cluster'] = kmeans.fit_predict(X_scaled_imputed)`,
             label: 'Cluster Output · Vehicle Makes',
             type: 'image',
             src: carPartPlanetClusterMakes,
+            restricted: true,
+            restrictedMessage:
+              'This clustering output includes client-specific demand segmentation and is available only on request.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts ML Cluster Output (Vehicle Makes)',
             alt: 'Cluster output table by vehicle make',
             description:
               'This output shows make distribution by cluster, where Cluster 0 captures high-volume mainstream transmission demand (for example Ford, Chevrolet, and Dodge), while Cluster 3 reflects lower-frequency niche makes. It helps separate core stocking priorities from long-tail inventory patterns.',
@@ -500,6 +529,10 @@ df['Cluster'] = kmeans.fit_predict(X_scaled_imputed)`,
             label: 'Cluster Output · Regional Demand',
             type: 'image',
             src: carPartPlanetClusterGeo,
+            restricted: true,
+            restrictedMessage:
+              'This regional demand cluster output reflects client market distribution data and is intentionally restricted in the public portfolio.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts ML Cluster Output (Regional Demand)',
             alt: 'Cluster output table by city and state',
             description:
               'This grouped city/state output highlights where high-volume Cluster 0 demand concentrates geographically, making it easier to prioritize regional purchasing and market targeting. It provides a practical map for location-specific inventory and ad planning decisions.',
@@ -524,6 +557,10 @@ df['Cluster'] = kmeans.fit_predict(X_scaled_imputed)`,
             label: 'Data Cleaning',
             type: 'image',
             src: qlearningDataCleaningNotebook,
+            restricted: true,
+            restrictedMessage:
+              'Notebook views in this section are tied to client call/sales data preparation and are blurred publicly for confidentiality.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts Q-Learning Data Cleaning Notebook',
             alt: 'Jupyter notebook step for inspecting and cleaning call sales data',
             description:
               'Notebook snapshot from the data-preparation phase showing schema inspection and core cleaning steps, including revenue normalization and datetime conversion used before reinforcement-learning training.',
@@ -533,6 +570,10 @@ df['Cluster'] = kmeans.fit_predict(X_scaled_imputed)`,
             label: 'RL State Features',
             type: 'image',
             src: qlearningStateSpaceNotebook,
+            restricted: true,
+            restrictedMessage:
+              'This reinforcement-learning state model is derived from client operational data and is available by request only.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts Q-Learning State Features',
             alt: 'Jupyter notebook view used to define reinforcement learning state features',
             description:
               'State space is defined from historical records using Hour, Day of Week, Shop, Call Type, and Part Type. This feature set gives the Q-Learning agent enough operational context to recommend staffing levels per time window and sales scenario.',
@@ -560,6 +601,10 @@ df['Cluster'] = kmeans.fit_predict(X_scaled_imputed)`,
             label: 'Business Metrics',
             type: 'image',
             src: qlearningBusinessMetrics,
+            restricted: true,
+            restrictedMessage:
+              'This business metrics artifact includes client-sensitive performance outputs and is intentionally gated behind request.',
+            requestAccessEmailSubject: 'Request access: ExpediaParts Q-Learning Business Metrics',
             alt: 'Business metrics calculations from recommended staffing outputs',
             description:
               'These metrics translate model recommendations into operational impact by quantifying staff capacity, productivity per staff member, expected labor cost, and estimated net revenue. Together they make it easier to validate whether recommended staffing levels are financially efficient and where adjustments can increase profitability.',
@@ -1274,6 +1319,10 @@ plt.show()`,
             type: 'image',
             src: frbTmtsUserPrerequisites,
             centerInFrame: true,
+            restricted: true,
+            restrictedMessage:
+              'This internal banking workflow artifact is blurred publicly. Access is available for active interview processes and client-approved review requests.',
+            requestAccessEmailSubject: 'Request access: First Republic Bank TMTS Flows + Prototypes',
             alt: 'TMTS user prerequisite screens and setup flow',
             description:
               'First asset in the TMTS case study showing user prerequisites and setup states required before users can proceed through treasury tracking workflows. Implementation planning maps these prerequisite interactions to Angular component flows, state transitions, and API-driven validation checks tested through Postman.',
@@ -1297,6 +1346,10 @@ plt.show()`,
             type: 'image',
             src: frbApiSubscriptionFlows,
             centerInFrame: true,
+            restricted: true,
+            restrictedMessage:
+              'This asset includes sensitive internal API enrollment and rejection-state flows. Public view is intentionally blurred; full review is available upon request.',
+            requestAccessEmailSubject: 'Request access: First Republic Bank TMTS API Subscription Flows',
             alt: 'TMTS API subscription flows and modal states',
             description:
               'Detailed TMTS interaction sequence for API subscription management. This version was fully prototyped in Figma before implementation, then translated into Angular workflows for enrollment, modal actions, and historical audit visibility inside the payments API portal.',
@@ -1484,12 +1537,18 @@ function AnnotationDot({ x, y, label, dir = 'right', index, dark = false }: Anno
 
 // ─── Single case study card ───────────────────────────────────────────────────
 
-function CaseStudyCard({ project }: { project: Project }) {
+function CaseStudyCard({ project, grantedAssetKeys }: { project: Project; grantedAssetKeys: Set<string> }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeAsset, setActiveAsset] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImageOverride, setLightboxImageOverride] = useState<{ src: string; alt: string; annotations?: Annotation[] } | null>(null);
   const [technicalModalOpen, setTechnicalModalOpen] = useState(false);
+  const [accessModalOpen, setAccessModalOpen] = useState(false);
+  const [requesterName, setRequesterName] = useState('');
+  const [requesterEmail, setRequesterEmail] = useState('');
+  const [requesterMessage, setRequesterMessage] = useState('');
+  const [requestState, setRequestState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [requestError, setRequestError] = useState<string | null>(null);
   const slide = project.slides[activeSlide];
   const displayedPanelDescription = slide.panelDescription ?? project.description;
   const isHero = slide.isHero ?? activeSlide === 0;
@@ -1508,9 +1567,19 @@ function CaseStudyCard({ project }: { project: Project }) {
         alt: slide.alt,
         annotations: slide.annotations,
         darkAnnotations: slide.darkAnnotations,
+        restricted: undefined,
+        restrictedMessage: undefined,
+        requestAccessEmailSubject: undefined,
       }];
   const resolvedAssetIndex = Math.min(activeAsset, Math.max(slideAssets.length - 1, 0));
   const currentAsset = slideAssets[resolvedAssetIndex];
+  const currentAssetKey = `${project.id}:${currentAsset.id}`;
+  const isRestrictedAsset = Boolean(currentAsset.restricted) && !grantedAssetKeys.has(currentAssetKey);
+  const restrictedMessage = currentAsset.restrictedMessage
+    ?? 'This asset contains client-sensitive implementation details and is available on request.';
+  const requestAccessSubject =
+    currentAsset.requestAccessEmailSubject
+    ?? `Request access: ${project.client} — ${currentAsset.label}`;
   const displayedSkills = currentAsset.skills ?? slide.skills ?? project.tech;
   const displayedDescription = currentAsset.description ?? slide.description;
   const lightboxImageSrc = lightboxImageOverride?.src ?? currentAsset.src;
@@ -1527,6 +1596,9 @@ function CaseStudyCard({ project }: { project: Project }) {
   useEffect(() => {
     setActiveAsset(0);
     setTechnicalModalOpen(false);
+    setAccessModalOpen(false);
+    setRequestState('idle');
+    setRequestError(null);
     setLightboxImageOverride(null);
   }, [project.id, activeSlide]);
 
@@ -1540,6 +1612,53 @@ function CaseStudyCard({ project }: { project: Project }) {
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
   }, [technicalModalOpen]);
+
+  const submitAccessRequest = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!requesterName.trim() || !requesterEmail.trim()) {
+      setRequestState('error');
+      setRequestError('Please provide your name and email.');
+      return;
+    }
+
+    setRequestState('submitting');
+    setRequestError(null);
+
+    try {
+      const response = await fetch('/api/request-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectId: project.id,
+          assetId: currentAsset.id,
+          assetLabel: `${project.client} — ${currentAsset.label}`,
+          requesterName: requesterName.trim(),
+          requesterEmail: requesterEmail.trim(),
+          requesterMessage: requesterMessage.trim(),
+          requestedSubject: requestAccessSubject,
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload?.details || payload?.error || 'Failed to submit access request');
+      }
+
+      setRequestState('success');
+    } catch (error) {
+      setRequestState('error');
+      setRequestError(error instanceof Error ? error.message : 'Failed to submit access request.');
+    }
+  }, [
+    requestAccessSubject,
+    requesterName,
+    requesterEmail,
+    requesterMessage,
+    project.id,
+    currentAsset.id,
+    currentAsset.label,
+    project.client,
+  ]);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -2158,6 +2277,50 @@ function CaseStudyCard({ project }: { project: Project }) {
                     </div>
                   )}
 
+                  {isRestrictedAsset ? (
+                    <div
+                      className="absolute inset-0 z-20 flex items-center justify-center p-4 md:p-6"
+                      style={{
+                        background: 'rgba(3,6,40,0.44)',
+                        backdropFilter: 'blur(7px)',
+                      }}
+                    >
+                      <div
+                        className="max-w-lg w-full border border-[#F9D976]/26 rounded-sm p-4 md:p-5"
+                        style={{ background: 'rgba(5,14,96,0.76)' }}
+                      >
+                        <div
+                          className="text-[#F9D976]/88 uppercase mb-2"
+                          style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '9px', letterSpacing: '0.25em', fontWeight: 300 }}
+                        >
+                          Client Confidential
+                        </div>
+                        <p
+                          className="text-[#FEF5EC]/72 leading-relaxed"
+                          style={{ fontFamily: '"Inter", sans-serif', fontSize: '0.76rem', letterSpacing: '0.01em' }}
+                        >
+                          {restrictedMessage}
+                        </p>
+                        <button
+                          onClick={() => setAccessModalOpen(true)}
+                          className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-sm border border-[#F9D976]/35 text-[#F9D976]/92 transition-colors duration-200 hover:bg-[#F9D976]/10 hover:text-[#F9D976]"
+                          style={{
+                            fontFamily: '"Josefin Sans", sans-serif',
+                            fontSize: '9px',
+                            letterSpacing: '0.2em',
+                            fontWeight: 300,
+                            cursor: 'none',
+                          }}
+                        >
+                          Request Access
+                          <svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true">
+                            <path d="M 1,8 L 8,1 M 3,1 L 8,1 L 8,6" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+
                 </motion.div>
               </AnimatePresence>
 
@@ -2234,7 +2397,7 @@ function CaseStudyCard({ project }: { project: Project }) {
                 </p>
               )}
 
-              {currentAsset.implementationHighlights?.length ? (
+              {currentAsset.implementationHighlights?.length && !isRestrictedAsset ? (
                 <button
                   onClick={() => setTechnicalModalOpen(true)}
                   className="inline-flex items-center gap-2 w-fit px-3 py-1.5 rounded-sm border border-[#F9D976]/28 text-[#F9D976]/88 transition-colors duration-200 hover:bg-[#F9D976]/10 hover:text-[#F9D976]"
@@ -2253,7 +2416,7 @@ function CaseStudyCard({ project }: { project: Project }) {
                 </button>
               ) : null}
 
-              {displayedCtaUrl && (
+              {displayedCtaUrl && !isRestrictedAsset && (
                 <a
                   href={displayedCtaUrl}
                   target="_blank"
@@ -2273,6 +2436,25 @@ function CaseStudyCard({ project }: { project: Project }) {
                   </svg>
                 </a>
               )}
+
+              {isRestrictedAsset ? (
+                <button
+                  onClick={() => setAccessModalOpen(true)}
+                  className="inline-flex items-center gap-2 w-fit px-3 py-1.5 rounded-sm border border-[#F9D976]/35 text-[#F9D976]/90 transition-colors duration-200 hover:bg-[#F9D976]/10 hover:text-[#F9D976]"
+                  style={{
+                    fontFamily: '"Josefin Sans", sans-serif',
+                    fontSize: '9px',
+                    letterSpacing: '0.2em',
+                    fontWeight: 300,
+                    cursor: 'none',
+                  }}
+                >
+                  Request Access
+                  <svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true">
+                    <path d="M 1,8 L 8,1 M 3,1 L 8,1 L 8,6" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              ) : null}
 
               {slide.detailSections?.length ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1">
@@ -2309,7 +2491,7 @@ function CaseStudyCard({ project }: { project: Project }) {
       </div>
 
       {/* Lightbox is portaled to body so transformed parent doesn't clip fixed overlays */}
-      {canPortal && lightboxOpen && currentAsset.type === 'pdf' && currentAsset.pdfSrc && createPortal(
+      {canPortal && lightboxOpen && currentAsset.type === 'pdf' && Boolean(currentAsset.pdfSrc) && !isRestrictedAsset ? createPortal(
         /* PDF lightbox — full scrollable document in an iframe */
         <div
           className="fixed inset-0 z-[200] flex flex-col"
@@ -2342,11 +2524,11 @@ function CaseStudyCard({ project }: { project: Project }) {
           </div>
         </div>,
         document.body
-      )}
+      ) : null}
 
-      {canPortal && lightboxOpen && currentAsset.type === 'image' && lightboxImageSrc && createPortal(
+      {canPortal && lightboxOpen && currentAsset.type === 'image' && Boolean(lightboxImageSrc) && !isRestrictedAsset ? createPortal(
         <ImageLightbox
-          src={lightboxImageSrc}
+          src={lightboxImageSrc!}
           alt={lightboxImageAlt}
           annotations={lightboxImageAnnotations}
           onClose={() => {
@@ -2355,9 +2537,9 @@ function CaseStudyCard({ project }: { project: Project }) {
           }}
         />,
         document.body
-      )}
+      ) : null}
 
-      {canPortal && technicalModalOpen && currentAsset.implementationHighlights?.length && createPortal(
+      {canPortal && technicalModalOpen && Boolean(currentAsset.implementationHighlights?.length) ? createPortal(
         <div
           className="fixed inset-0 z-[210] flex items-center justify-center px-4 md:px-8"
           style={{ background: 'rgba(3,6,40,0.92)' }}
@@ -2390,7 +2572,7 @@ function CaseStudyCard({ project }: { project: Project }) {
             </div>
             <div className="max-h-[68vh] overflow-y-auto px-4 md:px-6 py-4">
               <ul className="space-y-2">
-                {currentAsset.implementationHighlights.map((item) => (
+                {currentAsset.implementationHighlights?.map((item) => (
                   <li
                     key={item}
                     className="text-[#FEF5EC]/70 leading-relaxed"
@@ -2404,7 +2586,90 @@ function CaseStudyCard({ project }: { project: Project }) {
           </div>
         </div>,
         document.body
-      )}
+      ) : null}
+
+      {canPortal && Boolean(accessModalOpen) ? createPortal(
+        <div
+          className="fixed inset-0 z-[220] flex items-center justify-center px-4 md:px-8"
+          style={{ background: 'rgba(3,6,40,0.92)' }}
+          onClick={() => setAccessModalOpen(false)}
+        >
+          <div
+            className="w-full max-w-xl border border-[#FEF5EC]/14 rounded-sm overflow-hidden"
+            style={{ background: 'rgba(5,14,96,0.96)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-[#FEF5EC]/12">
+              <div
+                className="uppercase"
+                style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '10px', letterSpacing: '0.24em', fontWeight: 200, color: 'rgba(249,217,118,0.85)' }}
+              >
+                Request Restricted Access
+              </div>
+              <button onClick={() => setAccessModalOpen(false)} style={{ cursor: 'none', color: 'rgba(254,245,236,0.5)' }} aria-label="Close access request modal">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  <line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="px-4 md:px-6 py-4">
+              <p className="text-[#FEF5EC]/68 mb-4" style={{ fontFamily: '"Inter", sans-serif', fontSize: '0.78rem', letterSpacing: '0.01em', lineHeight: 1.5 }}>
+                Request access for: <span className="text-[#F9D976]/88">{project.client} — {currentAsset.label}</span>
+              </p>
+
+              {requestState === 'success' ? (
+                <div className="border border-green-300/30 rounded-sm px-3 py-2 text-green-200/90" style={{ fontFamily: '"Inter", sans-serif', fontSize: '0.76rem' }}>
+                  Request sent. An alert email with an asset-specific unlock link has been delivered for review.
+                </div>
+              ) : (
+                <form className="space-y-3" onSubmit={submitAccessRequest}>
+                  <input
+                    value={requesterName}
+                    onChange={(e) => setRequesterName(e.target.value)}
+                    placeholder="Your name"
+                    className="w-full bg-[#0a0f49]/70 border border-[#FEF5EC]/18 text-[#FEF5EC] px-3 py-2 text-sm"
+                    style={{ fontFamily: '"Inter", sans-serif' }}
+                  />
+                  <input
+                    type="email"
+                    value={requesterEmail}
+                    onChange={(e) => setRequesterEmail(e.target.value)}
+                    placeholder="Your email"
+                    className="w-full bg-[#0a0f49]/70 border border-[#FEF5EC]/18 text-[#FEF5EC] px-3 py-2 text-sm"
+                    style={{ fontFamily: '"Inter", sans-serif' }}
+                  />
+                  <textarea
+                    value={requesterMessage}
+                    onChange={(e) => setRequesterMessage(e.target.value)}
+                    rows={3}
+                    placeholder="Optional context (interview process, role, company)"
+                    className="w-full bg-[#0a0f49]/70 border border-[#FEF5EC]/18 text-[#FEF5EC] px-3 py-2 text-sm resize-none"
+                    style={{ fontFamily: '"Inter", sans-serif' }}
+                  />
+
+                  {requestError ? (
+                    <p className="text-red-300 text-xs" style={{ fontFamily: '"Inter", sans-serif' }}>
+                      {requestError}
+                    </p>
+                  ) : null}
+
+                  <button
+                    type="submit"
+                    disabled={requestState === 'submitting'}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm border border-[#F9D976]/35 text-[#F9D976]/92 transition-colors duration-200 hover:bg-[#F9D976]/10 disabled:opacity-50"
+                    style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '9px', letterSpacing: '0.2em', fontWeight: 300, cursor: 'none' }}
+                  >
+                    {requestState === 'submitting' ? 'Submitting...' : 'Send Request'}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body
+      ) : null}
     </div>
   );
 }
@@ -2416,6 +2681,60 @@ export function CaseStudies() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const targetProgressRef = useRef(0);
+  const [grantedAssetKeys, setGrantedAssetKeys] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const hydrateAccessGrants = async () => {
+      if (typeof window === 'undefined') return;
+
+      const params = new URLSearchParams(window.location.search);
+      const tokenFromUrl = params.get('access_token');
+      const storedTokens = (() => {
+        try {
+          const raw = window.localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+          return raw ? (JSON.parse(raw) as string[]) : [];
+        } catch {
+          return [];
+        }
+      })();
+
+      const tokenList = Array.from(new Set([
+        ...storedTokens,
+        ...(tokenFromUrl ? [tokenFromUrl] : []),
+      ])).filter(Boolean);
+
+      if (tokenFromUrl) {
+        params.delete('access_token');
+        const next = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}${window.location.hash}`;
+        window.history.replaceState({}, '', next);
+      }
+
+      if (!tokenList.length) {
+        setGrantedAssetKeys(new Set());
+        return;
+      }
+
+      const verificationResults = await Promise.all(
+        tokenList.map(async (token) => {
+          try {
+            const res = await fetch(`/api/access-verify?token=${encodeURIComponent(token)}`);
+            const json = await res.json();
+            return json?.valid ? { token, assetKeys: json.assetKeys || [] } : null;
+          } catch {
+            return null;
+          }
+        })
+      );
+
+      const validTokens = verificationResults.filter(Boolean) as Array<{ token: string; assetKeys: string[] }>;
+      const mergedKeys = new Set<string>();
+      validTokens.forEach((entry) => entry.assetKeys.forEach((k) => mergedKeys.add(k)));
+      setGrantedAssetKeys(mergedKeys);
+      window.localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, JSON.stringify(validTokens.map((v) => v.token)));
+    };
+
+    hydrateAccessGrants();
+  }, []);
 
   useEffect(() => {
     const jumpToHashProject = (behavior: ScrollBehavior = 'smooth') => {
@@ -2558,7 +2877,7 @@ export function CaseStudies() {
 
                   {/* Card content — fills remaining height */}
                   <div className="flex-1 min-h-0">
-                    <CaseStudyCard project={project} />
+                    <CaseStudyCard project={project} grantedAssetKeys={grantedAssetKeys} />
                   </div>
                 </div>
               );
