@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { AboutIllustration, OjaiOriginsSceneWide } from './AboutIllustrations';
+import soundcloudJenniferBeaver from '../../imports/soundcloud_jennifer_beaver.png';
 
 interface AboutMeProps {
   isVisible: boolean;
@@ -145,6 +146,10 @@ const steps = [
       </>
     ),
     body: 'Worked privately and in public high school level education before pivoting into design and development.',
+    musicArchiveUrl: 'https://soundcloud.com/jennifer-beaver-1',
+    musicArchivePreview: soundcloudJenniferBeaver,
+    musicArchiveTitle: 'Explore my older music work on SoundCloud',
+    musicArchiveNote: 'This is archival work from an earlier chapter of my career.',
   },
   {
     number: '04',
@@ -342,6 +347,8 @@ export function AboutMeSection({ isVisible, scrollProgress }: AboutMeProps) {
               const itemOpacity = Math.max(0, 1 - distanceFromCenter * 1.5);
               const textTransformX = (continuousIndex - idx) * 40;
               const isOdd = idx % 2 === 1;
+              const isPastLifeStep = step.number === '03';
+              const placeAboveRule = isOdd && !isPastLifeStep;
 
               if (step.isIntro) {
                 return (
@@ -495,63 +502,128 @@ export function AboutMeSection({ isVisible, scrollProgress }: AboutMeProps) {
                       </>
                     ) : (
                       // ── All other steps ──
-                      <div
-                        className="absolute left-1/2 w-full max-w-3xl px-10 md:px-16 flex flex-col pointer-events-auto"
-                        style={{
-                          ...(isOdd
-                            ? { bottom: 'calc(50vh + 3.5rem)' }
-                            : { top: 'calc(50vh + 2rem)' }),
-                          transform: `translate(calc(-50% + ${textTransformX}px), 0)`,
-                        }}
-                      >
-                        {/* Number + overline */}
-                        <div className="flex items-center gap-4 mb-5">
-                          <span
-                            className="text-[#FEF5EC]/50 text-[10px] tracking-[0.4em]"
-                            style={{ fontFamily: '"Inter", sans-serif' }}
+                      <>
+                        {isPastLifeStep && step.musicArchiveUrl && step.musicArchivePreview ? (
+                          <a
+                            href={step.musicArchiveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute left-1/2 inline-flex flex-col gap-2 border border-[#FEF5EC]/14 p-2 max-w-md transition-colors duration-200 hover:border-[#F9D976]/35 pointer-events-auto"
+                            style={{
+                              cursor: 'none',
+                              background: 'rgba(254,245,236,0.02)',
+                              bottom: 'calc(50vh + 2.2rem)',
+                              transform: `translate(calc(-50% + ${textTransformX}px), 0)`,
+                            }}
                           >
-                            {step.number}
-                          </span>
-                          <div className="h-px flex-1 bg-white/10" />
-                          <div className="flex items-center gap-2">
-                            <motion.span
-                              animate={{ opacity: [1, 0.15, 1] }}
-                              transition={{ duration: 2, repeat: Infinity }}
-                              className="w-1.5 h-1.5 rounded-full bg-[#F9D976] inline-block"
+                            <img
+                              src={step.musicArchivePreview}
+                              alt="Jennifer Beaver SoundCloud preview"
+                              className="w-full h-auto block"
+                              style={{ border: '1px solid rgba(254,245,236,0.12)' }}
                             />
                             <span
-                              className="text-[#FEF5EC]/35 text-[10px] uppercase"
-                              style={{ fontFamily: '"Josefin Sans", sans-serif', letterSpacing: '0.35em', fontWeight: 200 }}
+                              className="text-[#F9D976]/88 uppercase"
+                              style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '9px', letterSpacing: '0.2em', fontWeight: 300 }}
                             >
-                              {step.overline}
+                              {step.musicArchiveTitle ?? 'Explore SoundCloud'}
                             </span>
+                            <span
+                              className="text-[#FEF5EC]/45"
+                              style={{ fontFamily: '"Inter", sans-serif', fontSize: '0.72rem', lineHeight: 1.45 }}
+                            >
+                              {step.musicArchiveNote}
+                            </span>
+                          </a>
+                        ) : null}
+
+                        <div
+                          className="absolute left-1/2 w-full max-w-3xl px-10 md:px-16 flex flex-col pointer-events-auto"
+                          style={{
+                            ...(placeAboveRule
+                              ? { bottom: 'calc(50vh + 3.5rem)' }
+                              : { top: 'calc(50vh + 2rem)' }),
+                            transform: `translate(calc(-50% + ${textTransformX}px), 0)`,
+                          }}
+                        >
+                          {/* Number + overline */}
+                          <div className="flex items-center gap-4 mb-5">
+                            <span
+                              className="text-[#FEF5EC]/50 text-[10px] tracking-[0.4em]"
+                              style={{ fontFamily: '"Inter", sans-serif' }}
+                            >
+                              {step.number}
+                            </span>
+                            <div className="h-px flex-1 bg-white/10" />
+                            <div className="flex items-center gap-2">
+                              <motion.span
+                                animate={{ opacity: [1, 0.15, 1] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="w-1.5 h-1.5 rounded-full bg-[#F9D976] inline-block"
+                              />
+                              <span
+                                className="text-[#FEF5EC]/35 text-[10px] uppercase"
+                                style={{ fontFamily: '"Josefin Sans", sans-serif', letterSpacing: '0.35em', fontWeight: 200 }}
+                              >
+                                {step.overline}
+                              </span>
+                            </div>
                           </div>
+
+                          {/* Heading */}
+                          <h2
+                            className="text-[#FEF5EC] uppercase"
+                            style={{
+                              fontFamily: '"Poiret One", sans-serif',
+                              fontSize: 'clamp(2rem, 4.8vw, 4.2rem)',
+                              lineHeight: 1.08,
+                              letterSpacing: '0.08em',
+                              WebkitTextStroke: '0.6px #FEF5EC',
+                            }}
+                          >
+                            {step.heading}
+                          </h2>
+
+                          <p
+                            className="mt-4 text-[#FEF5EC]/45 leading-relaxed"
+                            style={{
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 'clamp(0.8rem, 1.3vw, 0.95rem)',
+                            }}
+                          >
+                            {step.body}
+                          </p>
+
+                          {!isPastLifeStep && step.musicArchiveUrl && step.musicArchivePreview ? (
+                            <a
+                              href={step.musicArchiveUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-4 inline-flex flex-col gap-2 border border-[#FEF5EC]/14 p-2 max-w-md transition-colors duration-200 hover:border-[#F9D976]/35"
+                              style={{ cursor: 'none', background: 'rgba(254,245,236,0.02)' }}
+                            >
+                              <img
+                                src={step.musicArchivePreview}
+                                alt="Jennifer Beaver SoundCloud preview"
+                                className="w-full h-auto block"
+                                style={{ border: '1px solid rgba(254,245,236,0.12)' }}
+                              />
+                              <span
+                                className="text-[#F9D976]/88 uppercase"
+                                style={{ fontFamily: '"Josefin Sans", sans-serif', fontSize: '9px', letterSpacing: '0.2em', fontWeight: 300 }}
+                              >
+                                {step.musicArchiveTitle ?? 'Explore SoundCloud'}
+                              </span>
+                              <span
+                                className="text-[#FEF5EC]/45"
+                                style={{ fontFamily: '"Inter", sans-serif', fontSize: '0.72rem', lineHeight: 1.45 }}
+                              >
+                                {step.musicArchiveNote}
+                              </span>
+                            </a>
+                          ) : null}
                         </div>
-
-                        {/* Heading */}
-                        <h2
-                          className="text-[#FEF5EC] uppercase"
-                          style={{
-                            fontFamily: '"Poiret One", sans-serif',
-                            fontSize: 'clamp(2rem, 4.8vw, 4.2rem)',
-                            lineHeight: 1.08,
-                            letterSpacing: '0.08em',
-                            WebkitTextStroke: '0.6px #FEF5EC',
-                          }}
-                        >
-                          {step.heading}
-                        </h2>
-
-                        <p
-                          className="mt-4 text-[#FEF5EC]/45 leading-relaxed"
-                          style={{
-                            fontFamily: '"Inter", sans-serif',
-                            fontSize: 'clamp(0.8rem, 1.3vw, 0.95rem)',
-                          }}
-                        >
-                          {step.body}
-                        </p>
-                      </div>
+                      </>
                     )}
 
                     {/* Origins uses a full-width Ojai scene below the timeline rule */}
@@ -574,7 +646,7 @@ export function AboutMeSection({ isVisible, scrollProgress }: AboutMeProps) {
                       <div
                         className="absolute hidden md:block"
                         style={{
-                          ...(isOdd
+                          ...(placeAboveRule
                             ? { top: 'calc(50vh - 2px)', left: `calc(10% + ${textTransformX}px)` }
                             : { bottom: 'calc(50vh - 2px)', left: `calc(10% + ${textTransformX}px)` }
                           ),
@@ -583,7 +655,7 @@ export function AboutMeSection({ isVisible, scrollProgress }: AboutMeProps) {
                         <AboutIllustration
                           stepKey={step.illustrationKey}
                           isActive={distanceFromCenter < 0.6}
-                          flipUp={!isOdd}
+                          flipUp={!placeAboveRule}
                         />
                       </div>
                     )}
