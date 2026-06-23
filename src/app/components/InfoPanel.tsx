@@ -30,7 +30,7 @@ const nodeDetails: Record<string, NodeDetail> = {
       { label: 'Drum Channel — PHP, JavaScript, and jQuery platform architecture', href: '#case-study-drumchannel' },
       { label: 'First Republic Bank — Angular.js internal tooling', href: '#case-study-first-republic-bank' },
       { label: 'Apple TV+ — Private React + Airtable + Retool CMS work (no public case study)', href: '#case-studies' },
-      { label: 'AntaresTech — Vue.js product and launch interfaces (case study coming soon)', href: '#case-studies' },
+      { label: 'AntaresTech — Vue.js product and launch interfaces', href: '#case-study-antarestech' },
     ],
   },
   'design-systems': {
@@ -67,7 +67,7 @@ const nodeDetails: Record<string, NodeDetail> = {
       { label: 'Visual Sound Engineer — Marketing landing pages and design systems', href: '#case-study-visual-studio-engineer' },
       { label: 'imFORZA / Nipit — Brand and commerce website design + development', href: '#case-study-imforza' },
       { label: 'Agavos Group — Marketing-focused website redesign', href: '#case-study-agavos-group' },
-      { label: 'Antares Audio Technologies — Vue.js launch interfaces (case study coming soon)', href: '#case-studies' },
+      { label: 'Antares Audio Technologies — Vue.js launch interfaces', href: '#case-study-antarestech' },
     ],
   },
   enterprise: {
@@ -96,7 +96,7 @@ const nodeDetails: Record<string, NodeDetail> = {
       { label: 'ExpediaParts — CMS-integrated marketing and product surfaces', href: '#case-study-expediaparts' },
       { label: 'Drum Channel — WordPress platform architecture and custom components', href: '#case-study-drumchannel' },
       { label: 'imFORZA / Nipit — WordPress implementation and CMS page systems', href: '#case-study-imforza' },
-      { label: 'AntaresTech — CMS and launch-platform integrations (case study coming soon)', href: '#case-studies' },
+      { label: 'AntaresTech — CMS and launch-platform integrations', href: '#case-study-antarestech' },
     ],
   },
   'ai-dev': {
