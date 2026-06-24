@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X } from 'lucide-react';
+import { track } from '@vercel/analytics';
 
 interface InfoPanelProps {
   nodeId: string | null;
@@ -240,6 +241,13 @@ export function InfoPanel({ nodeId, onClose }: InfoPanelProps) {
                     <a
                       key={item.href}
                       href={item.href}
+                      onClick={() => {
+                        track('sidebar_case_study_click', {
+                          nodeId,
+                          label: item.label,
+                          href: item.href,
+                        });
+                      }}
                       className="flex items-center gap-4 py-2.5 border-b border-white/8 last:border-b-0 text-[#FEF5EC]/65 hover:text-[#F9D976] transition-colors duration-200"
                       style={{ cursor: 'none' }}
                     >

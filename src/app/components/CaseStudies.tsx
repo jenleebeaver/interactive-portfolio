@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { createPortal } from 'react-dom';
+import { track } from '@vercel/analytics';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { ImageLightbox } from './ImageLightbox';
 
@@ -1678,6 +1679,12 @@ function CaseStudyCard({ project }: { project: Project }) {
   const lightboxImageAnnotations = lightboxImageOverride?.annotations ?? currentAsset.annotations;
   const displayedCtaUrl = currentAsset.ctaUrl ?? slide.ctaUrl;
   const displayedCtaLabel = currentAsset.ctaLabel ?? slide.ctaLabel ?? 'View Documentation';
+  const trackCaseStudyEvent = useCallback((event: string, payload?: Record<string, string | number | boolean | undefined>) => {
+    track(event, {
+      projectId: project.id,
+      ...payload,
+    });
+  }, [project.id]);
 
   const prev = useCallback(() =>
     setActiveSlide(i => (i - 1 + project.slides.length) % project.slides.length), [project.slides.length]);
@@ -1701,6 +1708,14 @@ function CaseStudyCard({ project }: { project: Project }) {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [technicalModalOpen]);
 
+  useEffect(() => {
+    trackCaseStudyEvent('case_study_view', {
+      slideIndex: activeSlide + 1,
+      assetId: currentAsset.id,
+      assetType: currentAsset.type,
+    });
+  }, [activeSlide, currentAsset.id, currentAsset.type, trackCaseStudyEvent]);
+
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex-1 min-h-0 max-w-7xl mx-auto w-full px-8 md:px-16 py-4 flex flex-col">
@@ -1713,6 +1728,12 @@ function CaseStudyCard({ project }: { project: Project }) {
                 href={project.clientUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  trackCaseStudyEvent('case_study_client_link_click', {
+                    client: project.client,
+                    url: project.clientUrl,
+                  });
+                }}
                 className="text-[#FEF5EC]/55 text-[10px] uppercase transition-colors duration-200 hover:text-[#F9D976]/80 group flex items-center gap-1.5"
                 style={{ fontFamily: '"Josefin Sans", sans-serif', letterSpacing: '0.3em', fontWeight: 200, cursor: 'none' }}
               >
@@ -1791,7 +1812,14 @@ function CaseStudyCard({ project }: { project: Project }) {
                   {slideAssets.map((asset, i) => (
                     <button
                       key={asset.id}
-                      onClick={() => setActiveAsset(i)}
+                      onClick={() => {
+                        setActiveAsset(i);
+                        trackCaseStudyEvent('case_study_asset_tab_click', {
+                          assetId: asset.id,
+                          assetType: asset.type,
+                          tabIndex: i + 1,
+                        });
+                      }}
                       className="px-2 py-1 rounded-sm border transition-colors duration-200"
                       style={{
                         cursor: 'none',
@@ -1826,7 +1854,13 @@ function CaseStudyCard({ project }: { project: Project }) {
                   {project.slides.map((s, i) => (
                     <button
                       key={`tab-${i}`}
-                      onClick={() => setActiveSlide(i)}
+                      onClick={() => {
+                        setActiveSlide(i);
+                        trackCaseStudyEvent('case_study_project_view_click', {
+                          slideIndex: i + 1,
+                          viewLabel: s.projectViewTitle ?? s.caption ?? `Project ${i + 1}`,
+                        });
+                      }}
                       className="px-2.5 py-1.5 rounded-sm transition-colors duration-200 text-left"
                       style={{
                         cursor: 'none',
@@ -1874,7 +1908,13 @@ function CaseStudyCard({ project }: { project: Project }) {
                   {project.slides.map((s, i) => (
                     <button
                       key={i}
-                      onClick={() => setActiveSlide(i)}
+                      onClick={() => {
+                        setActiveSlide(i);
+                        trackCaseStudyEvent('case_study_slide_thumb_click', {
+                          slideIndex: i + 1,
+                          viewLabel: s.caption ?? `Screen ${i + 1}`,
+                        });
+                      }}
                       className="relative overflow-hidden rounded-sm border transition-all duration-200"
                       style={{
                         cursor: 'none',
@@ -2366,7 +2406,12 @@ function CaseStudyCard({ project }: { project: Project }) {
               {project.slides.length > 1 && !showProjectTabs && (
                 <>
                   <button
-                    onClick={prev}
+                    onClick={() => {
+                      prev();
+                      trackCaseStudyEvent('case_study_prev_click', {
+                        fromSlide: activeSlide + 1,
+                      });
+                    }}
                     style={{ cursor: 'none' }}
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center transition-opacity duration-200 opacity-40 hover:opacity-90"
                   >
@@ -2375,7 +2420,12 @@ function CaseStudyCard({ project }: { project: Project }) {
                     </svg>
                   </button>
                   <button
-                    onClick={next}
+                    onClick={() => {
+                      next();
+                      trackCaseStudyEvent('case_study_next_click', {
+                        fromSlide: activeSlide + 1,
+                      });
+                    }}
                     style={{ cursor: 'none' }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center transition-opacity duration-200 opacity-40 hover:opacity-90"
                   >
@@ -2439,7 +2489,13 @@ function CaseStudyCard({ project }: { project: Project }) {
 
               {currentAsset.implementationHighlights?.length ? (
                 <button
-                  onClick={() => setTechnicalModalOpen(true)}
+                  onClick={() => {
+                    setTechnicalModalOpen(true);
+                    trackCaseStudyEvent('case_study_technical_impl_open', {
+                      assetId: currentAsset.id,
+                      assetType: currentAsset.type,
+                    });
+                  }}
                   className="inline-flex items-center gap-2 w-fit px-3 py-1.5 rounded-sm border border-[#F9D976]/28 text-[#F9D976]/88 transition-colors duration-200 hover:bg-[#F9D976]/10 hover:text-[#F9D976]"
                   style={{
                     fontFamily: '"Josefin Sans", sans-serif',
@@ -2461,6 +2517,14 @@ function CaseStudyCard({ project }: { project: Project }) {
                   href={displayedCtaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => {
+                    trackCaseStudyEvent('case_study_cta_click', {
+                      assetId: currentAsset.id,
+                      assetType: currentAsset.type,
+                      ctaLabel: displayedCtaLabel,
+                      ctaUrl: displayedCtaUrl,
+                    });
+                  }}
                   className="inline-flex items-center gap-2 w-fit px-3 py-1.5 rounded-sm border border-[#F9D976]/35 text-[#F9D976]/90 transition-colors duration-200 hover:bg-[#F9D976]/10 hover:text-[#F9D976]"
                   style={{
                     fontFamily: '"Josefin Sans", sans-serif',
